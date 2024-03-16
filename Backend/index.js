@@ -1,4 +1,5 @@
 const express = require("express");
+const customer = require("./Model/customer")
 
 const app = express();
 const PORT = 3000;
@@ -13,4 +14,6 @@ app.get("/", (req, res) => {
 })
 
 
-app.listen(PORT);
+app.listen(PORT, () => {
+    console.log(`App running on http://localhost:${PORT}`)
+})
