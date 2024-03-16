@@ -11,11 +11,8 @@ mongoose.connect(process.env.DATABASE_URL)
 
 
 const customerSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    email: String,
-    phone: String,
-    address: String,
+    c_id: String,
+    c_name: String,
 });
 
 // Create a Mongoose model for the customer
