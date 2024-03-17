@@ -1,18 +1,13 @@
 const express = require('express')
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const DeliveryPerson = require('../../Model/deliveryPerson');
 
+const deliveryManRead = express.Router();
 
-const deliveryPersonRead = express.Router();
-
-deliveryPersonRead.get("/", (req, res) => {
-    res.status(200).json({
-        msg: "Hello from deliveryman read"
+deliveryManRead.get("/", (req, res) => {
+    res.json({
+        msg: "hello from read"
     })
 })
 
-
 module.exports = {
-    deliveryPersonRead
+    deliveryManRead
 }

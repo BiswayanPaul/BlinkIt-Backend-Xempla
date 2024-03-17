@@ -2,7 +2,7 @@ const express = require('express')
 
 const customerDelete = express.Router();
 
-customerDelete.get("/signup", (req, res) => {
+customerDelete.delete("/", (req, res) => {
     res.json({
         msg: "hello"
     })

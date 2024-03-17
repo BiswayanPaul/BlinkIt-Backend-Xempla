@@ -4,10 +4,10 @@ const bcrypt = require('bcrypt');
 const DeliveryPerson = require('../../Model/deliveryPerson');
 
 
-const deliveryPersonCreate = express.Router();
+const deliveryManCreate = express.Router();
 
 
-deliveryPersonCreate.post("/signup", async (req, res) => {
+deliveryManCreate.post("/signup", async (req, res) => {
     const { d_phone, d_password, d_name, d_email, d_init_loc, d_curr_loc } = req.body;
     try {
         const existingUser = await DeliveryPerson.findOne({ d_phone: d_phone })
@@ -42,7 +42,7 @@ deliveryPersonCreate.post("/signup", async (req, res) => {
     }
 
 })
-deliveryPersonCreate.post("/signin", async (req, res) => {
+deliveryManCreate.post("/signin", async (req, res) => {
 
     try {
         const { d_phone, d_password } = req.body;
@@ -83,5 +83,5 @@ deliveryPersonCreate.post("/signin", async (req, res) => {
 
 
 module.exports = {
-    deliveryPersonCreate
+    deliveryManCreate
 }

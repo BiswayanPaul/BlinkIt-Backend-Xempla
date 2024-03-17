@@ -1,18 +1,14 @@
 const express = require('express')
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const DeliveryPerson = require('../../Model/deliveryPerson');
 
 
-const deliveryPersonUpdate = express.Router();
+const deliveryManUpdate = express.Router();
 
-deliveryPersonUpdate.get("/", (req, res) => {
+deliveryManUpdate.put("/", (req, res) => {
     res.status(200).json({
         msg: "Hello from deliveryman Update"
     })
 })
 
-
 module.exports = {
-    deliveryPersonUpdate
+    deliveryManUpdate
 }
