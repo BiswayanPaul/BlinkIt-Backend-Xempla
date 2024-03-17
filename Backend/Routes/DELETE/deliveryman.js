@@ -1,18 +1,13 @@
 const express = require('express')
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const DeliveryPerson = require('../../Model/deliveryPerson');
 
+const deliveryManDelete = express.Router();
 
-const deliveryPersonDelete = express.Router();
-
-deliveryPersonDelete.get("/", (req, res) => {
+deliveryManDelete.delete("/", (req, res) => {
     res.status(200).json({
         msg: "Hello from deliveryman Delete"
     })
 })
 
-
 module.exports = {
-    deliveryPersonDelete
+    deliveryManDelete
 }
