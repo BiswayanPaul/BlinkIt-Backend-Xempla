@@ -3,12 +3,29 @@ const Customer = require("./Model/customer");
 const { mongoose } = require("mongoose");
 const DeliveryPerson = require("./Model/deliveryPerson");
 
+// Importing routes for CRUD operations
+
+const createProductRouter = require("./Routes/CREATE/product");
+const deleteProductRouter = require("./Routes/DELETE/product");
+const readProductRouter = require("./Routes/READ/product");
+const updateProductRouter = require("./Routes/UPDATE/product");
+
+const createRetailerRouter = require("./Routes/CREATE/retailer");
+const deleteRetailerRouter = require("./Routes/DELETE/retailer");
+const readRetailerRouter = require("./Routes/READ/retailer");
+const updateRetailerRouter = require("./Routes/UPDATE/retailer");
+
+const createStoreRouter = require("./Routes/CREATE/store");
+const deleteStoreRouter = require("./Routes/DELETE/store");
+const readStoreRouter = require("./Routes/READ/store");
+const updateStoreRouter = require("./Routes/UPDATE/store");
+
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
 
-mongoose.connect(process.env.DATABASE_URL)
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('Connected to MongoDB');
     })
@@ -16,6 +33,24 @@ mongoose.connect(process.env.DATABASE_URL)
         console.error('Error connecting to MongoDB:', error);
     });
 
+// Using routes for CRUD operations
+
+app.use("/create/product", createProductRouter);
+app.use("/delete/product", deleteProductRouter);
+app.use("/read/product", readProductRouter);
+app.use("/update/product", updateProductRouter);
+
+app.use("/create/retailer", createRetailerRouter);
+app.use("/delete/retailer", deleteRetailerRouter);
+app.use("/read/retailer", readRetailerRouter);
+app.use("/update/retailer", updateRetailerRouter);
+
+app.use("/create/store", createStoreRouter);
+app.use("/delete/store", deleteStoreRouter);
+app.use("/read/store", readStoreRouter);
+app.use("/update/store", updateStoreRouter);
+
+// Root route
 app.get("/", (req, res) => {
     res.json({
         msg: "Hi!"
