@@ -16,26 +16,12 @@ const deliveryPersonSchema = new mongoose.Schema({
         required: false
     },
     d_init_loc: {
-        type: {
-            type: String,
-            enum: ['Point'],
-            default: 'Point'
-        },
-        coordinates: {
-            type: [Number],
-            required: true
-        }
+        type: [[Number]],
+        required: true
     },
     d_curr_loc: {
-        type: {
-            type: String,
-            enum: ['Point'],
-            default: 'Point'
-        },
-        coordinates: {
-            type: [Number],
-            required: true
-        }
+        type: [[Number]],
+        required: true
     },
     d_rating: {
         type: Number,
@@ -45,15 +31,16 @@ const deliveryPersonSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    d_idle:{
+    d_idle: {
         type: Boolean,
-        required: true
+        // required: true,
+        default: true
     },
-    
+
 });
 
 // Create a Mongoose model for the customer
-const DeliveryPerson = mongoose.model('user', deliveryPersonSchema);
+const DeliveryPerson = mongoose.model('DeliveryPerson', deliveryPersonSchema);
 
 // Export the Customer model
 module.exports = DeliveryPerson;

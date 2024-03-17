@@ -3,6 +3,8 @@ const Customer = require("./Model/customer");
 const { mongoose } = require("mongoose");
 const DeliveryPerson = require("./Model/deliveryPerson");
 const { customer } = require("./Routes/EXPORT/customer");
+const { deliveryman } = require("./Routes/EXPORT/deliveryman");
+
 
 // Importing routes for CRUD operations
 
@@ -20,6 +22,7 @@ const createStoreRouter = require("./Routes/CREATE/store");
 const deleteStoreRouter = require("./Routes/DELETE/store");
 const readStoreRouter = require("./Routes/READ/store");
 const updateStoreRouter = require("./Routes/UPDATE/store");
+
 
 const app = express();
 const PORT = 3000;
@@ -46,7 +49,7 @@ app.get("/", (req, res) => {
 
 // Customer Route
 app.use("/api/v1/customer", customer)
-
+app.use("api/v1/deliveryman", deliveryman)
 
 app.listen(PORT, () => {
     console.log(`App running on http://localhost:${PORT}`)
