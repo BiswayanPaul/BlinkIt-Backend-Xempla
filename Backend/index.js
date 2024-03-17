@@ -41,20 +41,20 @@ mongoose.connect(process.env.DATABASE_URL)
 
 
 
-app.use("/create/product", createProductRouter);
-app.use("/delete/product", deleteProductRouter);
-app.use("/read/product", readProductRouter);
-app.use("/update/product", updateProductRouter);
+app.use("/api/v1/product/create", createProductRouter);
+app.use("/api/v1/product/delete", deleteProductRouter);
+app.use("/api/v1/product/read", readProductRouter);
+app.use("/api/v1/product/update", updateProductRouter);
 
-app.use("/create/retailer", createRetailerRouter);
-app.use("/delete/retailer", deleteRetailerRouter);
-app.use("/read/retailer", readRetailerRouter);
-app.use("/update/retailer", updateRetailerRouter);
+app.use("/api/v1/retailer/create", createRetailerRouter);
+app.use("/api/v1/retailer/delete", deleteRetailerRouter);
+app.use("/api/v1/retailer/read", readRetailerRouter);
+app.use("/api/v1/retailer/update", updateRetailerRouter);
 
-app.use("/create/store", createStoreRouter);
-app.use("/delete/store", deleteStoreRouter);
-app.use("/read/store", readStoreRouter);
-app.use("/update/store", updateStoreRouter);
+app.use("/api/v1/store/create", createStoreRouter);
+app.use("/api/v1/store/delete", deleteStoreRouter);
+app.use("/api/v1/store/read", readStoreRouter);
+app.use("/api/v1/store/update", updateStoreRouter);
 
 
 app.get("/", (req, res) => {
@@ -65,6 +65,7 @@ app.get("/", (req, res) => {
 
 // Customer Route
 app.use("/api/v1/customer", customer)
+// DeliveryMan Route
 app.use("api/v1/deliveryman", deliveryman)
 
 app.listen(PORT, () => {
