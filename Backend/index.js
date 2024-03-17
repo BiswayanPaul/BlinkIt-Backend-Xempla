@@ -41,6 +41,22 @@ mongoose.connect(process.env.DATABASE_URL)
 
 
 
+app.use("/create/product", createProductRouter);
+app.use("/delete/product", deleteProductRouter);
+app.use("/read/product", readProductRouter);
+app.use("/update/product", updateProductRouter);
+
+app.use("/create/retailer", createRetailerRouter);
+app.use("/delete/retailer", deleteRetailerRouter);
+app.use("/read/retailer", readRetailerRouter);
+app.use("/update/retailer", updateRetailerRouter);
+
+app.use("/create/store", createStoreRouter);
+app.use("/delete/store", deleteStoreRouter);
+app.use("/read/store", readStoreRouter);
+app.use("/update/store", updateStoreRouter);
+
+
 app.get("/", (req, res) => {
     res.json({
         msg: "Hi!"
