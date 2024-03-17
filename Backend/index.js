@@ -22,6 +22,7 @@ const deleteStoreRouter = require("./Routes/DELETE/store");
 const readStoreRouter = require("./Routes/READ/store");
 const updateStoreRouter = require("./Routes/UPDATE/store");
 
+const orderPlacementRouter = require("./Routes/ORDER/placed");
 const app = express();
 const PORT = 3000;
 
@@ -51,6 +52,8 @@ app.use("/api/v1/create/store", createStoreRouter);
 app.use("/api/v1/delete/store", deleteStoreRouter);
 app.use("/api/v1/read/store", readStoreRouter);
 app.use("/api/v1/update/store", updateStoreRouter);
+
+app.use("/api/v1/order/placed/", orderPlacementRouter);
 
 app.get("/", (req, res) => {
   res.json({
