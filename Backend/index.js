@@ -2,6 +2,7 @@ const express = require("express");
 const Customer = require("./Model/customer");
 const { mongoose } = require("mongoose");
 const DeliveryPerson = require("./Model/deliveryPerson");
+const { customer } = require("./Routes/EXPORT/customer");
 
 // Importing routes for CRUD operations
 
@@ -56,6 +57,8 @@ app.get("/", (req, res) => {
         msg: "Hi!"
     })
 })
+
+app.use("/api/v1/customer", customer)
 
 
 app.listen(PORT, () => {
