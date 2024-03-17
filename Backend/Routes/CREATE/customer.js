@@ -27,7 +27,7 @@ customerCreate.post("/signup", async (req, res) => {
             c_loc
         })
         const savedCustomer = await newCustomer.save();
-        const token = jwt.sign({ _id: savedCustomer._id }, process.env.JWT_SECRET)
+        const token = jwt.sign({ _id: savedCustomer._id }, process.env.JWT_SECRET, { expiresIn: '1h' })
         return res.status(200).json({
             token,
             msg: "New customer is created"
@@ -41,15 +41,43 @@ customerCreate.post("/signup", async (req, res) => {
     }
 
 })
-customerCreate.post("/signin", (req, res) => {
-    const [phone, password] = req.body;
+customerCreate.post("/signin", async (req, res) => {
 
-    const customer = Customer.findOne({ c_phone: phone });
+    try {
+        const { c_phone, c_password } = req.body;
 
-    if(customer){
-        
+        const customer = await Customer.find({ c_phone: c_phone });
+
+        if (!customer) {
+            return res.status(401).json({
+                msg: "Signin failed "
+            })
+        }
+
+        // console.log(customer.c_name)
+
+        // console.log(customer[0].c_password);
+        // console.log(c_password)
+
+        const match = await bcrypt.compare(c_password, customer[0].c_password);
+
+        if (!match) {
+            return res.status(401).json({
+                msg: "Incorrect Password"
+            })
+        }
+
+        const token = jwt.sign({ customerId: customer._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.json({
+            token,
+            msg: "Logged In"
+        })
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            error: "Internal Server error"
+        })
     }
-
 })
 
 

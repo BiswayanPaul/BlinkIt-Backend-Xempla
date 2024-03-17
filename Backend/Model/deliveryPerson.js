@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const deliveryPersonSchema = new mongoose.Schema({
-    d_id: {
-        type: String,
-        required: true
-    },
     d_name: {
         type: String,
         required: true
@@ -48,7 +44,12 @@ const deliveryPersonSchema = new mongoose.Schema({
     d_password: {
         type: String,
         required: true
-    }
+    },
+    d_idle:{
+        type: Boolean,
+        required: true
+    },
+    
 });
 
 // Create a Mongoose model for the customer
