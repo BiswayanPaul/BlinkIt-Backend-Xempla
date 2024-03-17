@@ -5,7 +5,6 @@ const DeliveryPerson = require("./Model/deliveryPerson");
 const { customer } = require("./Routes/EXPORT/customer");
 const { deliveryman } = require("./Routes/EXPORT/deliveryman");
 
-
 // Importing routes for CRUD operations
 
 const createProductRouter = require("./Routes/CREATE/product");
@@ -23,50 +22,46 @@ const deleteStoreRouter = require("./Routes/DELETE/store");
 const readStoreRouter = require("./Routes/READ/store");
 const updateStoreRouter = require("./Routes/UPDATE/store");
 
-
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
 
-
 // MongoDB connection
-mongoose.connect(process.env.DATABASE_URL)
-    .then(() => {
-        console.log('Connected to MongoDB');
-    })
-    .catch((error) => {
-        console.error('Error connecting to MongoDB:', error);
-    });
+mongoose
+  .connect(process.env.DATABASE_URL)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });
 
+app.use("/api/v1/create/product", createProductRouter);
+app.use("/api/v1/delete/product", deleteProductRouter);
+app.use("/api/v1/read/product", readProductRouter);
+app.use("/api/v1/update/product", updateProductRouter);
 
+app.use("/api/v1/create/retailer", createRetailerRouter);
+app.use("/api/v1/delete/retailer", deleteRetailerRouter);
+app.use("/api/v1/read/retailer", readRetailerRouter);
+app.use("/api/v1/update/retailer", updateRetailerRouter);
 
-app.use("/create/product", createProductRouter);
-app.use("/delete/product", deleteProductRouter);
-app.use("/read/product", readProductRouter);
-app.use("/update/product", updateProductRouter);
-
-app.use("/create/retailer", createRetailerRouter);
-app.use("/delete/retailer", deleteRetailerRouter);
-app.use("/read/retailer", readRetailerRouter);
-app.use("/update/retailer", updateRetailerRouter);
-
-app.use("/create/store", createStoreRouter);
-app.use("/delete/store", deleteStoreRouter);
-app.use("/read/store", readStoreRouter);
-app.use("/update/store", updateStoreRouter);
-
+app.use("/api/v1/create/store", createStoreRouter);
+app.use("/api/v1/delete/store", deleteStoreRouter);
+app.use("/api/v1/read/store", readStoreRouter);
+app.use("/api/v1/update/store", updateStoreRouter);
 
 app.get("/", (req, res) => {
-    res.json({
-        msg: "Hi!"
-    })
-})
+  res.json({
+    msg: "Hi!",
+  });
+});
 
 // Customer Route
-app.use("/api/v1/customer", customer)
-app.use("api/v1/deliveryman", deliveryman)
+app.use("/api/v1/customer", customer);
+app.use("/api/v1/deliveryman", deliveryman);
 
 app.listen(PORT, () => {
-    console.log(`App running on http://localhost:${PORT}`)
-})
+  console.log(`App running on http://localhost:${PORT}`);
+});
