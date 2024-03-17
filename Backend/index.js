@@ -9,6 +9,8 @@ const PORT = 3000;
 
 app.use(express.json());
 
+
+// MongoDB connection
 mongoose.connect(process.env.DATABASE_URL)
     .then(() => {
         console.log('Connected to MongoDB');
@@ -17,12 +19,15 @@ mongoose.connect(process.env.DATABASE_URL)
         console.error('Error connecting to MongoDB:', error);
     });
 
+
+
 app.get("/", (req, res) => {
     res.json({
         msg: "Hi!"
     })
 })
 
+// Customer Route
 app.use("/api/v1/customer", customer)
 
 

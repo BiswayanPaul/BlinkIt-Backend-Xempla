@@ -44,11 +44,15 @@ const deliveryPersonSchema = new mongoose.Schema({
     d_rating: {
         type: Number,
         default: 5
+    },
+    d_password: {
+        type: String,
+        required: true
     }
 });
 
 // Create a Mongoose model for the customer
-const DeliveryPerson = mongoose.model('DeliveryPerson', deliveryPersonSchema);
+const DeliveryPerson = mongoose.model('user', deliveryPersonSchema);
 
 // Export the Customer model
 module.exports = DeliveryPerson;

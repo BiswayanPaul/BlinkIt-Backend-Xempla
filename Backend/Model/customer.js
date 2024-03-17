@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const customerSchema = new mongoose.Schema({
-    c_id: {
-        type: String,
-        required: true
-    },
     c_name: {
         type: String,
         required: true
@@ -20,22 +16,16 @@ const customerSchema = new mongoose.Schema({
         required: false
     },
     c_loc: {
-        type: [{
-            type: {
-                type: String,
-                enum: ['Point'],
-                default: 'Point'
-            },
-            coordinates: {
-                type: [Number],
-                required: true
-            }
-        }],
+        type: [[Number]],
         required: true
     },
     c_rating: {
         type: Number,
         default: 5
+    },
+    c_password: {
+        type: String,
+        required: true
     }
 });
 
