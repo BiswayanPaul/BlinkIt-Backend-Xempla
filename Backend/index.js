@@ -4,6 +4,23 @@ const { mongoose } = require("mongoose");
 const DeliveryPerson = require("./Model/deliveryPerson");
 const { customer } = require("./Routes/EXPORT/customer");
 
+// Importing routes for CRUD operations
+
+const createProductRouter = require("./Routes/CREATE/product");
+const deleteProductRouter = require("./Routes/DELETE/product");
+const readProductRouter = require("./Routes/READ/product");
+const updateProductRouter = require("./Routes/UPDATE/product");
+
+const createRetailerRouter = require("./Routes/CREATE/retailer");
+const deleteRetailerRouter = require("./Routes/DELETE/retailer");
+const readRetailerRouter = require("./Routes/READ/retailer");
+const updateRetailerRouter = require("./Routes/UPDATE/retailer");
+
+const createStoreRouter = require("./Routes/CREATE/store");
+const deleteStoreRouter = require("./Routes/DELETE/store");
+const readStoreRouter = require("./Routes/READ/store");
+const updateStoreRouter = require("./Routes/UPDATE/store");
+
 const app = express();
 const PORT = 3000;
 
