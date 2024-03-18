@@ -2,7 +2,7 @@ const express = require("express");
 const { deliveryManRead } = require("../READ/deliveryman");
 const { deliveryManUpdate } = require("../UPDATE/deliveryman");
 const { deliveryManDelete } = require("../DELETE/deliveryman");
-const { deliveryManCreate } = require("../CREATE/deliveryMan");
+const { deliveryManCreate } = require("../CREATE/deliveryman");
 
 
 
