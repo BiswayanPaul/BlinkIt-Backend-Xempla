@@ -3,6 +3,7 @@ const router = express.Router();
 const Order = require("../../Model/order");
 const Store = require("../../Model/store");
 const Retailer = require("../../Model/retailer");
+const DeliveryPerson = require("../../Model/deliveryPerson");
 const addLatLng = require("../../Middlewares/FindLocation");
 const idString = "bl_@ord";
 
@@ -64,6 +65,7 @@ router.post("/:id", async (req, res) => {
   var size;
   var order_id;
   var retailer_id;
+  var deliveryPerson_id;
   // c_id,r_id,shipping_address,order_details,
   try {
     size = await Order.countDocuments({});
@@ -104,9 +106,49 @@ router.post("/:id", async (req, res) => {
     retailer_id = mapAsArray[0][0];
     const mapJSON = JSON.stringify(Object.fromEntries(mapAsArray));
     // console.log(`distance map : ${mapJSON}`);
-    res.status(200).json({ distance_map: mapJSON });
+    const dlvpMap = new Map();
+    try {
+      console.log(`slected retailer : ${retailer_id}`);
+      const deliveryPersons = await DeliveryPerson.find({});
+      const retailStoreLoc = await Retailer.findOne(
+        { r_id: retailer_id },
+        { r_location: true }
+      );
+
+      //   console.log(retailStoreLoc);
+      const retailStoreCord = retailStoreLoc.r_location.coordinates;
+      //   console.log(retailStoreCord);
+      for (const dlvp of deliveryPersons) {
+        console.log(dlvp.d_name);
+        console.log(dlvp.d_id);
+        console.log(dlvp.d_curr_loc[0][0]);
+        console.log(dlvp.d_curr_loc[0][1]);
+        console.log(retailStoreCord[0]);
+        console.log(retailStoreCord[1]);
+        if (dlvp.d_idle) {
+          dlvpMap.set(
+            dlvp.d_id,
+            await dist(
+              retailStoreCord[0],
+              retailStoreCord[1],
+              dlvp.d_curr_loc[0][0],
+              dlvp.d_curr_loc[0][1]
+            )
+          );
+        }
+      }
+      //   console.log(dlvpMap);
+      const sortedDlvpArray = Array.from(dlvpMap).sort((a, b) => a[1] - b[1]);
+      const dlvpMapAsArray = Array.from(sortedDlvpArray);
+      deliveryPerson_id = dlvpMapAsArray[0][0];
+      //   console.log(`delivery person id : ${deliveryPerson_id}`);
+      const dlvpMapJSON = JSON.stringify(Object.fromEntries(dlvpMapAsArray));
+      res.status(200).json({ dlvp_map: dlvpMapJSON });
+    } catch (error) {
+      res.status(500).json({ mesasge: "DP DB error" });
+    }
   } catch (error) {
-    res.status(500).send({ message: "Stores DB Error" });
+    res.status(500).json({ message: "Stores DB Error" });
   }
 });
 
