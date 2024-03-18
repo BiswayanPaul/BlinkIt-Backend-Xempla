@@ -6,6 +6,7 @@ const Retailer = require("../../Model/retailer");
 const Product = require("../../Model/product");
 // const Order = require("../../Model/order");
 const DeliveryPerson = require("../../Model/deliveryPerson");
+const { default: axios } = require("axios");
 const idString = "bl_@ord";
 
 function deg2rad(deg) {
@@ -153,6 +154,7 @@ router.post("/:id", async (req, res) => {
       const sortedDlvpArray = Array.from(dlvpMap).sort((a, b) => a[1] - b[1]);
       const dlvpMapAsArray = Array.from(sortedDlvpArray);
       deliveryPerson_id = dlvpMapAsArray[0][0];
+      var updated_data = [];
       console.log(`Selected Delivery Person ${deliveryPerson_id}`);
       try {
         const allProducts = await Product.find({});
@@ -168,10 +170,16 @@ router.post("/:id", async (req, res) => {
                 { p_id: pdct.p_id, r_id: retailer_id },
                 { amount: newAmount }
               );
+              const newData = await Product.findOne(
+                { p_id: pdct.p_id, r_id: retailer_id },
+                { p_id: true, _id: false, amount: true }
+              );
+              updated_data.push(newData);
             }
           }
         }
-
+        console.log(updated_data);
+        // console.log(updated_data);
         const orderSlip = {
           o_id: order_id,
           c_id: id,
@@ -185,6 +193,10 @@ router.post("/:id", async (req, res) => {
           payment_details: payment_details,
         };
 
+        const data = axios.patch(
+          `http://localhost:${port}/api/v1/update/store/${retailer_id}`,
+          updated_data
+        );
         const newOrder = new Order(orderSlip);
         const savedOrder = newOrder.save();
         console.log(`Saved order : \n${orderSlip}`);
