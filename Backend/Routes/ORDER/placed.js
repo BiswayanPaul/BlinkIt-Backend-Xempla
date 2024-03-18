@@ -3,8 +3,9 @@ const router = express.Router();
 const Order = require("../../Model/order");
 const Store = require("../../Model/store");
 const Retailer = require("../../Model/retailer");
+const Product = require("../../Model/product");
+// const Order = require("../../Model/order");
 const DeliveryPerson = require("../../Model/deliveryPerson");
-const addLatLng = require("../../Middlewares/FindLocation");
 const idString = "bl_@ord";
 
 function deg2rad(deg) {
@@ -66,6 +67,18 @@ router.post("/:id", async (req, res) => {
   var order_id;
   var retailer_id;
   var deliveryPerson_id;
+  var total_pay = 0;
+  const time_of_order = new Date();
+  var payment_mode = req.body.payment_mode;
+  var transaction_id = null;
+  if (payment_mode == "online") transaction_id = req.body.transaction_id;
+  var payment_status = req.body.payment_status;
+  var destination_address;
+  const payment_details = {
+    status: payment_status,
+    mode: payment_mode,
+    transaction_id: transaction_id,
+  };
   // c_id,r_id,shipping_address,order_details,
   try {
     size = await Order.countDocuments({});
@@ -76,6 +89,7 @@ router.post("/:id", async (req, res) => {
   }
   const latt = req.body.co_ordinates.latt;
   const long = req.body.co_ordinates.long;
+  destination_address = [latt, long];
   const orderedProductList = req.body.products;
   var distance = new Map();
   try {
@@ -104,8 +118,6 @@ router.post("/:id", async (req, res) => {
     // console.log(sortedDistanceMap);
     const mapAsArray = Array.from(sortedDistanceMap);
     retailer_id = mapAsArray[0][0];
-    const mapJSON = JSON.stringify(Object.fromEntries(mapAsArray));
-    // console.log(`distance map : ${mapJSON}`);
     const dlvpMap = new Map();
     try {
       console.log(`slected retailer : ${retailer_id}`);
@@ -119,12 +131,12 @@ router.post("/:id", async (req, res) => {
       const retailStoreCord = retailStoreLoc.r_location.coordinates;
       //   console.log(retailStoreCord);
       for (const dlvp of deliveryPersons) {
-        console.log(dlvp.d_name);
-        console.log(dlvp.d_id);
-        console.log(dlvp.d_curr_loc[0][0]);
-        console.log(dlvp.d_curr_loc[0][1]);
-        console.log(retailStoreCord[0]);
-        console.log(retailStoreCord[1]);
+        // console.log(dlvp.d_name);
+        // console.log(dlvp.d_id);
+        // console.log(dlvp.d_curr_loc[0][0]);
+        // console.log(dlvp.d_curr_loc[0][1]);
+        // console.log(retailStoreCord[0]);
+        // console.log(retailStoreCord[1]);
         if (dlvp.d_idle) {
           dlvpMap.set(
             dlvp.d_id,
@@ -141,9 +153,47 @@ router.post("/:id", async (req, res) => {
       const sortedDlvpArray = Array.from(dlvpMap).sort((a, b) => a[1] - b[1]);
       const dlvpMapAsArray = Array.from(sortedDlvpArray);
       deliveryPerson_id = dlvpMapAsArray[0][0];
-      //   console.log(`delivery person id : ${deliveryPerson_id}`);
-      const dlvpMapJSON = JSON.stringify(Object.fromEntries(dlvpMapAsArray));
-      res.status(200).json({ dlvp_map: dlvpMapJSON });
+      console.log(`Selected Delivery Person ${deliveryPerson_id}`);
+      try {
+        const allProducts = await Product.find({});
+        // console.log(allProducts);
+        for (const orderItem of orderedProductList) {
+          for (const pdct of allProducts) {
+            if (pdct.p_id === orderItem.p_id && pdct.r_id === retailer_id) {
+              console.log(pdct);
+              total_pay = total_pay + orderItem.amount * pdct.price;
+              const newAmount = pdct.amount - orderItem.amount;
+              console.log(total_pay);
+              await Product.findOneAndUpdate(
+                { p_id: pdct.p_id, r_id: retailer_id },
+                { amount: newAmount }
+              );
+            }
+          }
+        }
+
+        const orderSlip = {
+          o_id: order_id,
+          c_id: id,
+          r_id: retailer_id,
+          d_id: deliveryPerson_id,
+          time_of_order: time_of_order,
+          shipping_address: destination_address,
+          order_details: orderedProductList,
+          total_pay: total_pay,
+          delivery_status: "received",
+          payment_details: payment_details,
+        };
+
+        const newOrder = new Order(orderSlip);
+        const savedOrder = newOrder.save();
+        console.log(`Saved order : \n${orderSlip}`);
+        res
+          .status(200)
+          .json({ message: "Order Placed", full_order_details: savedOrder });
+      } catch (error) {
+        res.status(500).json({ message: "Product DB error" });
+      }
     } catch (error) {
       res.status(500).json({ mesasge: "DP DB error" });
     }
