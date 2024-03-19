@@ -20,9 +20,9 @@ function dist(lat1, lng1, lat2, lng2) {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLng / 2) *
-      Math.sin(dLng / 2);
+    Math.cos(deg2rad(lat2)) *
+    Math.sin(dLng / 2) *
+    Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c; // Distance in kilometers
   return distance;
@@ -194,9 +194,19 @@ router.post("/:id", async (req, res) => {
         };
 
         const data = axios.patch(
-          `http://localhost:${port}/api/v1/update/store/${retailer_id}`,
+          `http://localhost:${process.env.PORT}/api/v1/update/store/${retailer_id}`,
           updated_data
-        );
+        ).then(() => {
+          res.status(200).json({
+            msg: "Store data updated successfully"
+          })
+        }).catch(e => {
+          console.log(e);
+          res.status(401).json({
+            msg: "Store Data is not updated"
+          })
+        })
+          ;
         const newOrder = new Order(orderSlip);
         const savedOrder = newOrder.save();
         console.log(`Saved order : \n${orderSlip}`);

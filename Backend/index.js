@@ -24,7 +24,7 @@ const updateStoreRouter = require("./Routes/UPDATE/store");
 
 const orderPlacementRouter = require("./Routes/ORDER/placed");
 const app = express();
-const PORT = 3000;
+const PORT = 3000 || process.env.PORT;
 
 app.use(express.json());
 
