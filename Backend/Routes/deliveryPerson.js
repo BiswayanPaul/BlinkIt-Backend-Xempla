@@ -1,8 +1,9 @@
 const express = require('express');
-const router = express.Router();
+
 const DeliveryPerson = require('../Model/deliveryPerson');
 const Order = require('../Model/order');
 
+const router = express.Router();
 // Route to accept delivery request
 router.put('/accept/:orderId', async (req, res) => {
   try {
@@ -32,7 +33,7 @@ router.put('/deliver/:orderId', async (req, res) => {
 
     // Update order status to delivered and set time of delivery
     const currentTime = new Date();
-    await Order.findByIdAndUpdate(orderId, { 
+    await Order.findByIdAndUpdate(orderId, {
       delivery_status: 'delivered',
       time_of_delivery: currentTime
     });
@@ -42,5 +43,8 @@ router.put('/deliver/:orderId', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
 
 module.exports = router;
