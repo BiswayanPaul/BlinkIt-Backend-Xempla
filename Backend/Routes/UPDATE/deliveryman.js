@@ -21,11 +21,11 @@ deliveryManUpdate.put("/delivered/:orderID", (req, res) => {
 
         const currentTime = new Date();
 
-        d_man.d_idle = true;
+        d_man.d_idle = req.body.d_idle; // Boolean
 
-        order.payment_details.status = 'paid';
+        order.payment_details.status = req.body.payment_status;
         order.time_of_delivery = currentTime;
-        order.delivery_status = "delivered";
+        order.delivery_status = req.body.delivery_status;
 
         const savedDman = d_man.save();
         const savedOrder = order.save();
