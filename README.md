@@ -69,6 +69,8 @@ Start the server
 - **URL**: `{{base_url}}/delete/product/5fcbf6e5c017b405d04b18bc`
 
 Order Req Body :
+
+```json
 {
     "payment_mode" : "cash",
     "payment_status" : "pending", 
@@ -92,3 +94,4 @@ Order Req Body :
         "amount" : 5
     }]
 }
+```
