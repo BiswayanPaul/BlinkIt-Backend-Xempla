@@ -193,10 +193,11 @@ router.post("/:id", async (req, res) => {
           payment_details: payment_details,
         };
 
-        const data = axios.patch(
+        axios.patch(
           `http://localhost:${process.env.PORT}/api/v1/update/store/${retailer_id}`,
           updated_data
-        ).then(() => {
+        ).then((data) => {
+          console.log(data);
           res.status(200).json({
             msg: "Store data updated successfully"
           })
@@ -205,8 +206,9 @@ router.post("/:id", async (req, res) => {
           res.status(401).json({
             msg: "Store Data is not updated"
           })
-        })
-          ;
+        });
+
+
         const newOrder = new Order(orderSlip);
         const savedOrder = newOrder.save();
         console.log(`Saved order : \n${orderSlip}`);
