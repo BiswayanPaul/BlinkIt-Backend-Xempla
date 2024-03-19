@@ -6,7 +6,7 @@ const Retailer = require("../../Model/retailer");
 const Product = require("../../Model/product");
 // const Order = require("../../Model/order");
 const DeliveryPerson = require("../../Model/deliveryPerson");
-const { default: axios } = require("axios");
+const axios = require("axios");
 const idString = "bl_@ord";
 
 function deg2rad(deg) {
@@ -20,9 +20,9 @@ function dist(lat1, lng1, lat2, lng2) {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(lat1)) *
-    Math.cos(deg2rad(lat2)) *
-    Math.sin(dLng / 2) *
-    Math.sin(dLng / 2);
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c; // Distance in kilometers
   return distance;
@@ -112,6 +112,10 @@ router.post("/:id", async (req, res) => {
         );
       }
     }
+    if (distance.size === 0) {
+      res.status(500).json({ message: "Product is not Available" });
+      return;
+    }
     const sortedDistanceArray = Array.from(distance).sort(
       (a, b) => a[1] - b[1]
     );
@@ -151,9 +155,19 @@ router.post("/:id", async (req, res) => {
         }
       }
       //   console.log(dlvpMap);
+      if (dlvpMap.size === 0) {
+        res.status(500).json({
+          message: "No Delivery Person Available. Try After Sometime",
+        });
+        return;
+      }
       const sortedDlvpArray = Array.from(dlvpMap).sort((a, b) => a[1] - b[1]);
       const dlvpMapAsArray = Array.from(sortedDlvpArray);
       deliveryPerson_id = dlvpMapAsArray[0][0];
+      await DeliveryPerson.findOneAndUpdate(
+        { d_id: deliveryPerson_id },
+        { d_idle: false }
+      );
       var updated_data = [];
       console.log(`Selected Delivery Person ${deliveryPerson_id}`);
       try {
@@ -162,10 +176,10 @@ router.post("/:id", async (req, res) => {
         for (const orderItem of orderedProductList) {
           for (const pdct of allProducts) {
             if (pdct.p_id === orderItem.p_id && pdct.r_id === retailer_id) {
-              console.log(pdct);
+              // console.log(pdct);
               total_pay = total_pay + orderItem.amount * pdct.price;
               const newAmount = pdct.amount - orderItem.amount;
-              console.log(total_pay);
+              // console.log(total_pay);
               await Product.findOneAndUpdate(
                 { p_id: pdct.p_id, r_id: retailer_id },
                 { amount: newAmount }
@@ -178,7 +192,7 @@ router.post("/:id", async (req, res) => {
             }
           }
         }
-        console.log(updated_data);
+        // console.log(updated_data);
         // console.log(updated_data);
         const orderSlip = {
           o_id: order_id,
@@ -192,29 +206,39 @@ router.post("/:id", async (req, res) => {
           delivery_status: "received",
           payment_details: payment_details,
         };
-
-        axios.patch(
+        // console.log("HI");
+        const jsonUpdatedData = {
+          product_list: updated_data,
+        };
+        // jsonUpdatedData.product_list.forEach((p) => {
+        console.log("in placed");
+        //   console.log(p);
+        // });
+        console.log(updated_data);
+        const data = await axios.patch(
           `http://localhost:${process.env.PORT}/api/v1/update/store/${retailer_id}`,
-          updated_data
-        ).then((data) => {
-          console.log(data);
-          res.status(200).json({
-            msg: "Store data updated successfully"
-          })
-        }).catch(e => {
-          console.log(e);
-          res.status(401).json({
-            msg: "Store Data is not updated"
-          })
-        });
-
-
+          { product_list: updated_data }
+        );
+        // console.log("Hi after patch");
+        // .then((data) => {
+        //   console.log(data);
+        //   res.status(200).json({
+        //     msg: "Store data updated successfully",
+        //   });
+        // })
+        // .catch((e) => {
+        //   console.log(e);
+        //   res.status(401).json({
+        //     msg: "Store Data is not updated",
+        //   });
+        // });
+        // console.log(data);
         const newOrder = new Order(orderSlip);
         const savedOrder = newOrder.save();
         console.log(`Saved order : \n${orderSlip}`);
         res
           .status(200)
-          .json({ message: "Order Placed", full_order_details: savedOrder });
+          .json({ message: "Order Placed", full_order_details: orderSlip });
       } catch (error) {
         res.status(500).json({ message: "Product DB error" });
       }
