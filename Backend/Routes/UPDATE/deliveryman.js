@@ -8,32 +8,42 @@ deliveryManUpdate.put("/delivered/:orderID", (req, res) => {
     const orderId = req.params.orderID;
     const d_man_id = req.body.d_man_id;
 
-    const d_man = DeliveryPerson.findOne({ d_id: d_man_id });
-    const order = Order.findOne({
-        o_id: orderId,
-        payment_details:
-        {
-            status: "pending",
-            mode: "cash"
-        }
-    });
+    try {
+        const d_man = DeliveryPerson.findOne({ d_id: d_man_id });
+        const order = Order.findOne({
+            o_id: orderId,
+            payment_details:
+            {
+                status: "pending",
+                mode: "cash"
+            }
+        });
 
-    d_man.d_idle = true;
+        const currentTime = new Date();
 
-    order.payment_details.status = 'paid';
+        d_man.d_idle = true;
 
-    order.delivery_status = "delivered";
+        order.payment_details.status = 'paid';
+        order.time_of_delivery = currentTime;
+        order.delivery_status = "delivered";
 
-    const savedDman = d_man.save();
-    const savedOrder = order.save();
+        const savedDman = d_man.save();
+        const savedOrder = order.save();
 
-    res
-        .status(200)
-        .json({
-            msg: "Order is delivered to customer successfully",
-            d_id: savedDman.d_id,
-            o_id: savedOrder.o_id
+        res
+            .status(200)
+            .json({
+                msg: "Order is delivered to customer successfully",
+                d_id: savedDman.d_id,
+                o_id: savedOrder.o_id
+            })
+
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            msg: "Internal server error"
         })
+    }
 })
 
 module.exports = {
