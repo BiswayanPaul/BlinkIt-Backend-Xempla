@@ -95,3 +95,33 @@ Order Req Body :
     }]
 }
 ```
+add products : 
+order req body : 
+``` json
+ { 
+     "p_id" : "p_3",
+     "r_id" : "rtlr_4",
+    "p_name" : "Product 3",
+    "price" : 20,
+    "amount" : 10
+}
+```
+add store :
+order req body :
+``` json
+{
+    "r_id" : "rtlr_5",
+    "product_list": [
+        {
+            "p_id": "p_1",
+            "amount": 8,
+            "price" : 10
+        },
+        {
+            "p_id": "p_5",
+            "amount": 16,
+            "price" : 24
+        }
+    ]
+}
+```
