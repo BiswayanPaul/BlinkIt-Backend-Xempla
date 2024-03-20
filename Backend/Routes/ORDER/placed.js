@@ -34,17 +34,6 @@ function checkAvail(productList, order) {
     // console.log(`Product : ${product}`);
     productsMap.set(product.p_id, true);
   });
-  //   productList.forEach((product) => {
-  //     console.log(
-  //       ` CHK Product in map => ${product.p_id} : ${productsMap.get(
-  //         product.p_id
-  //       )} `
-  //     );
-  //   });
-
-  //   order.forEach((orderItem) => {
-  //     console.log(`Order Item => ${orderItem.p_id} : ${orderItem.amount}`);
-  //   });
   for (const orderItem of order) {
     if (!productsMap.has(orderItem.p_id)) {
       console.log("false");
@@ -206,33 +195,15 @@ router.post("/:id", async (req, res) => {
           delivery_status: "received",
           payment_details: payment_details,
         };
-        // console.log("HI");
         const jsonUpdatedData = {
           product_list: updated_data,
         };
-        // jsonUpdatedData.product_list.forEach((p) => {
         console.log("in placed");
-        //   console.log(p);
-        // });
         console.log(updated_data);
         const data = await axios.patch(
           `http://localhost:${process.env.PORT}/api/v1/update/store/${retailer_id}`,
           { product_list: updated_data }
         );
-        // console.log("Hi after patch");
-        // .then((data) => {
-        //   console.log(data);
-        //   res.status(200).json({
-        //     msg: "Store data updated successfully",
-        //   });
-        // })
-        // .catch((e) => {
-        //   console.log(e);
-        //   res.status(401).json({
-        //     msg: "Store Data is not updated",
-        //   });
-        // });
-        // console.log(data);
         const newOrder = new Order(orderSlip);
         const savedOrder = newOrder.save();
         console.log(`Saved order : \n${orderSlip}`);
