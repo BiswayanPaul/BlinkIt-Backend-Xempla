@@ -48,7 +48,7 @@ Start the server
 - **Body**:
   ```json
   {
-    "d_id": "delivery001",
+    "d_id": "1",
     "d_name": "David Johnson",
     "d_phone": 1112223333,
     "d_email": "david@example.com",
@@ -84,15 +84,15 @@ Start the server
 - **Body**:
 ``` json
 {
-    "r_id" : "rtlr_5",
+    "r_id" : "1",
     "product_list": [
         {
-            "p_id": "p_1",
+            "p_id": "1",
             "amount": 8,
             "price" : 10
         },
         {
-            "p_id": "p_5",
+            "p_id": "2",
             "amount": 16,
             "price" : 24
         }
@@ -103,7 +103,7 @@ Start the server
 
 #### Update Store:
 - **Method**: PATCH
-- **URL**: `{{base_url}}/api/v1/update/store/5fcbf6e5c017b405d04b18bc`
+- **URL**: `{{base_url}}/api/v1/update/store/:r_id`
 - **Body**:
   ```json
   {
@@ -125,7 +125,8 @@ Start the server
 - **URL**: `{{base_url}}/api/v1/delete/product/:id`
 
 ## Order Req Body :
-
+- **Method**: POST
+- **URL**: `{{base_url}}/api/v1/order/placed/:c_id`
 ```json
 {
     "payment_mode" : "cash",
@@ -150,3 +151,6 @@ Start the server
 ```
 
 
+## Order Delivery Confirmation :
+- **Method**: PUT
+- **URL**: `{{base_url}}/api/v1/order/deliver/:_id`
