@@ -30,14 +30,14 @@ Blinkit delivery system aims to efficiently manage deliveries from retailers to 
 - HTTP status codes are used to convey the nature of the error to the client.
 
 ## External APIs
-- Google Maps API is used for finding latitude and longitude based on location addresses.
+- We tried using Google Maps API for finding latitude and longitude based on location addresses but it was paid and other geocodeing API was not as accurate as we wanted.
 - Axios is utilized to make HTTP requests to the Google Maps API endpoints.
 
 ## Project Setup
 1. Ensure Node.js and MongoDB are installed on your system.
 2. Clone the project repository and navigate to the project directory.
 3. Install dependencies using `npm install`.
-4. Create a `.env` file in the root directory and configure environment variables like `DATABASE_URL` and `JWT_SECRET`.
+4. Modify `.env` file in the root directory and configure environment variables like `DATABASE_URL` and `JWT_SECRET`.
 5. Start the MongoDB server.
 6. Run the application using `npm start`.
 
