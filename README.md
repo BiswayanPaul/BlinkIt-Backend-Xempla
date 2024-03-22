@@ -42,9 +42,9 @@ Start the server
   }
   ```
 
-<!-- #### Create deliveryPerson:
+#### Create deliveryPerson:
 - **Method**: POST
-- **URL**: `{{base_url}}/api/v1/create/deliveryPerson`
+- **URL**: `{{base_url}}/api/v1/deliveryman/signup`
 - **Body**:
   ```json
   {
@@ -58,7 +58,7 @@ Start the server
     "d_password": "deliverypassword123",
     "d_idle": true
   }
-  ``` -->
+  ```
 
 #### Create Product:
 - **Method**: POST
