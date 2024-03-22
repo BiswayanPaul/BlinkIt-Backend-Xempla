@@ -8,7 +8,7 @@ const deliveryManCreate = express.Router();
 
 
 deliveryManCreate.post("/signup", async (req, res) => {
-    const { d_phone, d_password, d_name, d_email, d_init_loc, d_curr_loc } = req.body;
+    const {d_id, d_phone, d_password, d_name, d_email, d_init_loc, d_curr_loc } = req.body;
     try {
         const existingUser = await DeliveryPerson.findOne({ d_phone: d_phone })
         if (existingUser) {
@@ -20,6 +20,7 @@ deliveryManCreate.post("/signup", async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newdeliveryPerson = new DeliveryPerson({
+            d_id,
             d_phone,
             d_password: hashedPassword,
             d_name,
