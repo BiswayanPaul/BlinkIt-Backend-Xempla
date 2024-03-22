@@ -30,8 +30,9 @@ Blinkit delivery system aims to efficiently manage deliveries from retailers to 
 - HTTP status codes are used to convey the nature of the error to the client.
 
 ## External APIs
-- We tried using Google Maps API for finding latitude and longitude based on location addresses but it was paid and other geocodeing API was not as accurate as we wanted.
 - Axios is utilized to make HTTP requests to the Google Maps API endpoints.
+- We tried using Google Maps API for finding latitude and longitude based on location addresses but it was paid and other geocodeing API was not as accurate as we wanted.
+- Bcrypt is used to hash and store passwords.
 
 ## Project Setup
 1. Ensure Node.js and MongoDB are installed on your system.
@@ -42,8 +43,6 @@ Blinkit delivery system aims to efficiently manage deliveries from retailers to 
 6. Run the application using `npm start`.
 
 ## Conclusion
-The Blinkit delivery system backend provides a robust foundation for managing various aspects of the delivery process, including customer management, retailer management, product management, and order placement. With proper authentication, error handling, and integration with external APIs, the system ensures smooth operation and efficient delivery of products to customers. Further enhancements and optimizations can be made based on specific business requirements and user feedback.
+The Blinkit delivery system backend provides a robust foundation for managing various aspects of the delivery process, including customer management, retailer management, product management, and order placement. With proper authentication, error handling, and integration with external APIs, the system ensures smooth operation and efficient delivery of products to customers.
 
 ---
-
-This documentation provides an overview of the Blinkit delivery system backend, its functionalities, technologies used, project structure, setup instructions, and a conclusion summarizing its significance and potential for future improvements.
