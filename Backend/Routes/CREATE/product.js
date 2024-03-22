@@ -29,22 +29,24 @@ router.post("/", async (req, res) => {
       );
       //   console.log(data);
     } else {
-      const product_list = await Store.findOne(
+      const product_data = await Store.findOne(
         { r_id: r_id },
         { product_list: true, _id: false }
       );
-      const product_list_array = [product_list];
-      //   console.log(`Is Array : ${Array.isArray(product_list)}`);
-      //   console.log(`If Store exixts : ${product_list_array}`);
+      const product_list_array = product_data.product_list;
+      // console.log(`Is Array : ${Array.isArray(product_list)}`);
+      console.log(`If Store exixts : ${product_list_array}`);
       const new_list = [];
       new_list.push({ p_id: p_id, amount: amount, price: price });
       for (const p of product_list_array) {
-        new_list.push({ p_id: p.p_id, amount: p.new_amount, price: p.price });
+        new_list.push({ p_id: p.p_id, amount: p.amount, price: p.price });
       }
+      console.log(new_list);
       await Store.findOneAndUpdate({ r_id: r_id }, { product_list: new_list });
       const newProduct = new Product(req.body);
       await newProduct.save();
       res.status(201).json(newProduct);
+      //   res.json({ message: "Responding" });
       return;
     }
     res.status(201).json({ message: "Product Added" });

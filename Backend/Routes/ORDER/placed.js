@@ -165,7 +165,7 @@ router.post("/:id", async (req, res) => {
         for (const orderItem of orderedProductList) {
           for (const pdct of allProducts) {
             if (pdct.p_id === orderItem.p_id && pdct.r_id === retailer_id) {
-              // console.log(pdct);
+              console.log(pdct);
               total_pay = total_pay + orderItem.amount * pdct.price;
               const newAmount = pdct.amount - orderItem.amount;
               // console.log(total_pay);
@@ -199,7 +199,7 @@ router.post("/:id", async (req, res) => {
           product_list: updated_data,
         };
         console.log("in placed");
-        console.log(updated_data);
+        console.log("Updated Data", updated_data);
         const data = await axios.patch(
           `http://localhost:${process.env.PORT}/api/v1/update/store/${retailer_id}`,
           { product_list: updated_data }

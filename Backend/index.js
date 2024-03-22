@@ -21,7 +21,7 @@ const createStoreRouter = require("./Routes/CREATE/store");
 const deleteStoreRouter = require("./Routes/DELETE/store");
 const readStoreRouter = require("./Routes/READ/store");
 const updateStoreRouter = require("./Routes/UPDATE/store");
-
+const orderconfirmRouter = require("./Routes/deliveryPerson");
 const orderPlacementRouter = require("./Routes/ORDER/placed");
 const app = express();
 const PORT = 3000 || process.env.PORT;
@@ -54,7 +54,7 @@ app.use("/api/v1/read/store", readStoreRouter);
 app.use("/api/v1/update/store", updateStoreRouter);
 
 app.use("/api/v1/order/placed/", orderPlacementRouter);
-
+app.use("/api/v1/order/", orderconfirmRouter);
 app.get("/", (req, res) => {
   res.json({
     msg: "Hi!",
