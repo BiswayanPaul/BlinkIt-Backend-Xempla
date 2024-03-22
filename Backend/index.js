@@ -62,6 +62,8 @@ app.get("/", (req, res) => {
 });
 
 // Customer Route
+
+
 app.use("/api/v1/customer", customer);
 app.use("/api/v1/deliveryman", deliveryman);
 
